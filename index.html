@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10233f">
+  <meta name="description" content="Interactive science teaching resources for Classes 6–8, with browser-based labs, presentations, animations and assessment tools.">
+  <title>Interactive Teaching Labs | Science, made explorable</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #12233d;
+      --muted: #5b6b82;
+      --paper: #f5f8fc;
+      --white: #ffffff;
+      --line: #dce5ef;
+      --navy: #10233f;
+      --blue: #3c75da;
+      --teal: #0f9b8e;
+      --gold: #f6bd4b;
+      --shadow: 0 18px 50px rgba(16, 35, 63, .09);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.6 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    a { color: inherit; }
+    a:focus-visible, button:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
+    .container { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+    .topbar { background: var(--navy); color: #fff; }
+    .topbar-inner { min-height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: inline-flex; align-items: center; gap: 11px; color: #fff; text-decoration: none; font-weight: 800; letter-spacing: -.03em; }
+    .brand-mark { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(145deg, var(--teal), var(--blue)); box-shadow: 0 6px 18px #0002; }
+    .brand-mark svg { width: 23px; height: 23px; }
+    .navlinks { display: flex; gap: 24px; align-items: center; }
+    .navlinks a { color: #d4dfef; font-size: .92rem; text-decoration: none; }
+    .navlinks a:hover { color: white; }
+    .navlinks .nav-cta { border: 1px solid #61728c; border-radius: 999px; color: white; padding: 7px 14px; }
+    .hero { overflow: hidden; position: relative; background: var(--navy); color: white; padding: 80px 0 86px; }
+    .hero::before, .hero::after { content: ""; position: absolute; border-radius: 50%; pointer-events: none; }
+    .hero::before { width: 490px; height: 490px; right: -130px; top: -230px; border: 1px solid #ffffff14; box-shadow: 0 0 0 48px #ffffff08, 0 0 0 100px #ffffff05; }
+    .hero::after { width: 280px; height: 280px; right: 12%; bottom: -230px; background: #3c75da18; }
+    .hero-grid { display: grid; grid-template-columns: 1.22fr .78fr; align-items: center; gap: 56px; position: relative; z-index: 1; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 9px; color: #bcd7ff; font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .15em; }
+    .eyebrow::before { content: ""; display: inline-block; width: 23px; height: 2px; background: var(--gold); }
+    h1 { max-width: 700px; margin: 18px 0 20px; font-size: clamp(2.7rem, 5.6vw, 4.8rem); line-height: 1.02; letter-spacing: -.065em; }
+    h1 span { color: #80d9ce; }
+    .hero-copy { max-width: 610px; margin: 0; color: #c9d4e4; font-size: clamp(1.05rem, 1.7vw, 1.2rem); }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    .button { display: inline-flex; justify-content: center; align-items: center; gap: 10px; min-height: 48px; padding: 12px 19px; border-radius: 12px; font-weight: 800; text-decoration: none; transition: transform .18s ease, box-shadow .18s ease; }
+    .button:hover { transform: translateY(-2px); }
+    .button-primary { color: #10233f; background: #80d9ce; box-shadow: 0 10px 24px #0f9b8e25; }
+    .button-secondary { color: white; background: #ffffff0a; border: 1px solid #ffffff2c; }
+    .button svg { width: 18px; height: 18px; }
+    .hero-art { min-height: 310px; display: grid; place-items: center; position: relative; }
+    .orbit { width: min(100%, 340px); aspect-ratio: 1; border: 1px solid #ffffff23; border-radius: 50%; display: grid; place-items: center; position: relative; }
+    .orbit::before, .orbit::after { content: ""; position: absolute; border: 1px dashed #ffffff20; border-radius: 50%; }
+    .orbit::before { inset: 28px; }
+    .orbit::after { inset: 63px; }
+    .planet-card { position: relative; z-index: 1; width: 145px; height: 145px; display: grid; place-items: center; background: linear-gradient(145deg, #5b8cf0, #0f9b8e); border-radius: 42px; transform: rotate(-7deg); box-shadow: 0 25px 60px #0005; }
+    .planet-card svg { width: 85px; height: 85px; transform: rotate(7deg); }
+    .float-tag { position: absolute; z-index: 2; border: 1px solid #ffffff2d; border-radius: 14px; padding: 9px 13px; color: #edf4ff; background: #1b3354dc; box-shadow: 0 12px 24px #0002; font-size: .84rem; font-weight: 750; }
+    .tag-one { top: 37px; left: 2px; }
+    .tag-two { right: 0; top: 94px; }
+    .tag-three { left: 14px; bottom: 37px; }
+    .stats { position: relative; margin-top: -26px; z-index: 3; }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); background: white; border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; }
+    .stat { display: flex; align-items: center; gap: 15px; padding: 22px 26px; }
+    .stat + .stat { border-left: 1px solid var(--line); }
+    .stat-icon { flex: 0 0 43px; width: 43px; height: 43px; border-radius: 13px; display: grid; place-items: center; background: #edf4ff; color: var(--blue); }
+    .stat-icon svg { width: 22px; height: 22px; }
+    .stat strong { display: block; font-size: 1.05rem; letter-spacing: -.025em; }
+    .stat span { color: var(--muted); font-size: .84rem; }
+    section { scroll-margin-top: 24px; }
+    .section { padding: 82px 0 10px; }
+    .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 28px; margin-bottom: 29px; }
+    .kicker { color: var(--teal); font-size: .78rem; font-weight: 850; text-transform: uppercase; letter-spacing: .14em; }
+    h2 { margin: 8px 0 0; font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -.055em; line-height: 1.1; }
+    .section-heading p { max-width: 440px; color: var(--muted); margin: 0 0 3px; }
+    .course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .course-card { background: var(--white); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; box-shadow: 0 8px 30px #10233f06; display: flex; flex-direction: column; min-width: 0; transition: transform .2s ease, box-shadow .2s ease; }
+    .course-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .card-art { min-height: 175px; padding: 24px; display: flex; align-items: center; justify-content: space-between; position: relative; overflow: hidden; }
+    .card-art::before { content: ""; position: absolute; width: 175px; height: 175px; right: -45px; bottom: -85px; border: 1px solid #ffffff4d; border-radius: 50%; box-shadow: 0 0 0 25px #ffffff12, 0 0 0 52px #ffffff0c; }
+    .art-six { background: linear-gradient(135deg, #e4f6ef, #a9e0cf); color: #12675e; }
+    .art-seven { background: linear-gradient(135deg, #e7edff, #b8cbff); color: #274eab; }
+    .art-eight { background: linear-gradient(135deg, #fff1d7, #f9ca77); color: #89500d; }
+    .class-label { position: absolute; left: 22px; top: 20px; font-size: .72rem; letter-spacing: .11em; font-weight: 900; text-transform: uppercase; }
+    .art-title { position: relative; z-index: 1; align-self: end; font-size: 1.3rem; font-weight: 900; letter-spacing: -.04em; max-width: 155px; line-height: 1.15; }
+    .art-symbol { position: relative; z-index: 1; margin: 22px 8px 0 0; width: 86px; height: 86px; display: grid; place-items: center; border-radius: 26px; background: #ffffff80; border: 1px solid #ffffff70; box-shadow: 0 10px 25px #10233f0b; }
+    .art-symbol svg { width: 53px; height: 53px; }
+    .card-body { padding: 23px; display: flex; flex-direction: column; flex: 1; }
+    .pills { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
+    .pill { border-radius: 999px; padding: 4px 9px; color: #4c5c73; background: #f0f4f9; font-size: .72rem; font-weight: 800; }
+    .pill.live { color: #087368; background: #e1f7f2; }
+    h3 { margin: 0 0 9px; font-size: 1.35rem; line-height: 1.25; letter-spacing: -.035em; }
+    .card-body p { margin: 0; color: var(--muted); font-size: .94rem; }
+    .topics { display: flex; flex-wrap: wrap; gap: 7px; margin: 17px 0 23px; }
+    .topic { font-size: .77rem; color: #41536b; border: 1px solid #e0e7ef; border-radius: 8px; padding: 4px 8px; }
+    .card-actions { display: flex; flex-direction: column; gap: 9px; margin-top: auto; }
+    .card-actions .button { width: 100%; min-height: 45px; font-size: .9rem; }
+    .button-dark { color: white; background: var(--navy); }
+    .button-light { color: var(--ink); background: white; border: 1px solid var(--line); }
+    .assessment { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 28px; margin: 60px 0 0; padding: 31px 34px; border: 1px solid var(--line); border-radius: 20px; background: #fff; box-shadow: 0 8px 30px #10233f06; }
+    .assessment-copy { display: flex; align-items: center; gap: 20px; }
+    .assessment-icon { flex: 0 0 58px; width: 58px; height: 58px; display: grid; place-items: center; border-radius: 17px; color: #fff; background: linear-gradient(145deg, var(--blue), #6d8df0); }
+    .assessment-icon svg { width: 30px; height: 30px; }
+    .assessment h3 { margin-bottom: 4px; }
+    .assessment p { margin: 0; color: var(--muted); font-size: .93rem; }
+    .assessment .button { white-space: nowrap; }
+    .teaching { padding: 80px 0; }
+    .teaching-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 58px; align-items: start; }
+    .teaching-lede { color: var(--muted); font-size: 1.05rem; margin: 18px 0 24px; }
+    .teaching-tip { display: flex; gap: 13px; color: #36536b; font-size: .92rem; background: #e8f7f4; border: 1px solid #cdebe5; border-radius: 14px; padding: 14px 16px; }
+    .teaching-tip svg { flex: 0 0 22px; color: var(--teal); margin-top: 2px; }
+    .steps { display: grid; gap: 13px; }
+    .step { display: grid; grid-template-columns: 44px 1fr; gap: 15px; align-items: start; background: white; border: 1px solid var(--line); border-radius: 15px; padding: 17px 19px; }
+    .step-num { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 13px; background: #edf4ff; color: var(--blue); font-size: .85rem; font-weight: 900; }
+    .step strong { display: block; margin: 1px 0 3px; }
+    .step p { color: var(--muted); font-size: .9rem; margin: 0; }
+    .note { margin-top: 24px; border-left: 3px solid var(--gold); padding: 5px 0 5px 16px; color: var(--muted); font-size: .86rem; }
+    .footer { background: var(--navy); color: #c9d4e4; padding: 31px 0; }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+    .footer strong { color: white; }
+    .footer p { margin: 4px 0 0; font-size: .85rem; }
+    .footer-links { display: flex; gap: 18px; flex-wrap: wrap; }
+    .footer-links a { color: #d4dfef; text-decoration: none; font-size: .9rem; }
+    .footer-links a:hover { color: white; }
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr .65fr; gap: 25px; }
+      .hero-art { min-height: 260px; }
+      .orbit { width: 260px; }
+      .planet-card { width: 115px; height: 115px; border-radius: 32px; }
+      .planet-card svg { width: 68px; height: 68px; }
+      .course-grid { gap: 14px; }
+      .card-body { padding: 19px; }
+      .stat { padding: 18px 15px; }
+      .teaching-grid { gap: 32px; }
+    }
+    @media (max-width: 720px) {
+      .container { width: min(100% - 28px, 560px); }
+      .navlinks { gap: 13px; }
+      .navlinks a:not(.nav-cta) { display: none; }
+      .hero { padding: 62px 0 65px; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-art { display: none; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .stat { padding: 14px 19px; }
+      .stat + .stat { border-left: 0; border-top: 1px solid var(--line); }
+      .section { padding-top: 62px; }
+      .section-heading { display: block; }
+      .section-heading p { margin-top: 15px; }
+      .course-grid { grid-template-columns: 1fr; }
+      .card-art { min-height: 150px; }
+      .assessment { grid-template-columns: 1fr; padding: 23px; }
+      .assessment-copy { align-items: flex-start; }
+      .assessment .button { width: 100%; }
+      .teaching { padding: 62px 0; }
+      .teaching-grid { grid-template-columns: 1fr; gap: 26px; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="#top" aria-label="Interactive Teaching Labs home">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M9 3h6M10 3v6.2L4.5 18a2 2 0 0 0 1.7 3h11.6a2 2 0 0 0 1.7-3L14 9.2V3" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.2 16h9.6M9 13.3h6" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        <span>Interactive Teaching Labs</span>
+      </a>
+      <nav class="navlinks" aria-label="Main navigation">
+        <a href="#demos">Explore demos</a>
+        <a href="#approach">Teaching approach</a>
+        <a class="nav-cta" href="https://github.com/neyhal/interactive-teaching-labs" target="_blank" rel="noopener">View source ↗</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">Science you can explore</div>
+          <h1>Make concepts visible. <span>Make learning active.</span></h1>
+          <p class="hero-copy">A growing collection of classroom resources for Classes 6–8: interactive labs, visual explanations, presentations and quick assessments designed to help students predict, explore and explain.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#demos">Explore the demos <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <a class="button button-secondary" href="https://github.com/neyhal/interactive-teaching-labs" target="_blank" rel="noopener">Browse project files ↗</a>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="orbit">
+            <span class="float-tag tag-one">Observe</span><span class="float-tag tag-two">Experiment</span><span class="float-tag tag-three">Explain</span>
+            <div class="planet-card"><svg viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="34" stroke="white" stroke-width="3"/><ellipse cx="50" cy="50" rx="47" ry="16" transform="rotate(-27 50 50)" stroke="white" stroke-width="3"/><path d="m34 35 8-6 9 3 2 9-8 6-1 10-8 2-7-9 3-8-6-3 8-4Zm24 16 9-4 9 5-2 8-7 6-6-4-3-11Z" fill="#D6FFF6"/></svg></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container stats" aria-label="Project highlights">
+      <div class="stats-grid">
+        <div class="stat"><span class="stat-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 19V5m0 14h17M7 15l4-4 3 2 6-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><strong>Classes 6–8</strong><span>Built around school science</span></div></div>
+        <div class="stat"><span class="stat-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 21h8m-4-4v4M7 9h4m-4 4h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><div><strong>Browser-based labs</strong><span>Open and try the activities</span></div></div>
+        <div class="stat"><span class="stat-icon"><svg viewBox="0 0 24 24" fill="none"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><div><strong>Built and refined in practice</strong><span>Classroom-led iteration</span></div></div>
+      </div>
+    </div>
+
+    <section class="section" id="demos">
+      <div class="container">
+        <div class="section-heading">
+          <div><div class="kicker">The demo library</div><h2>Choose a class. Start exploring.</h2></div>
+          <p>Launch an interactive activity or open the teaching materials. These resources work best alongside explanation, student questions and physical demonstrations where practical.</p>
+        </div>
+
+        <div class="course-grid">
+          <article class="course-card">
+            <div class="card-art art-six"><span class="class-label">Class 06 · Physics</span><span class="art-title">Simple<br>Machines</span><span class="art-symbol" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><path d="M9 49h46M16 49 32 18l16 31" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 49h48M32 18v31" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><rect x="24" y="9" width="16" height="9" rx="2" fill="currentColor" opacity=".18" stroke="currentColor" stroke-width="2.5"/></svg></span></div>
+            <div class="card-body">
+              <div class="pills"><span class="pill live">Interactive lab</span><span class="pill">Presentation</span></div>
+              <h3>Work smarter with simple machines</h3>
+              <p>Explore how everyday tools help us apply force and make work easier.</p>
+              <div class="topics"><span class="topic">Levers</span><span class="topic">Pulleys</span><span class="topic">Inclined planes</span></div>
+              <div class="card-actions">
+                <a class="button button-dark" href="./class6_simple_machines_complete_teaching_pack/Interactive_Lab/" target="_blank" rel="noopener">Launch Class 6 lab ↗</a>
+                <a class="button button-light" href="./class6_simple_machines_complete_teaching_pack/Presentation/Class_6_Simple_Machines_Teaching_Presentation.pptx">Download presentation ↓</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="course-card">
+            <div class="card-art art-seven"><span class="class-label">Class 07 · Physics</span><span class="art-title">Force &<br>Motion</span><span class="art-symbol" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><path d="M8 51h48M12 43l11-13 8 5 18-23" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M39 12h10v10" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="14" cy="43" r="4" fill="currentColor"/><circle cx="23" cy="30" r="4" fill="currentColor"/><circle cx="31" cy="35" r="4" fill="currentColor"/></svg></span></div>
+            <div class="card-body">
+              <div class="pills"><span class="pill live">Interactive lab</span><span class="pill">Animations</span></div>
+              <h3>See motion from different angles</h3>
+              <p>Change values, compare quantities and connect mathematical results with movement.</p>
+              <div class="topics"><span class="topic">Scalars & vectors</span><span class="topic">Speed</span><span class="topic">Acceleration</span></div>
+              <div class="card-actions">
+                <a class="button button-dark" href="./Class7_Force_Motion_Teaching_Pack/Interactive_Lab/" target="_blank" rel="noopener">Launch Class 7 lab ↗</a>
+                <a class="button button-light" href="./Class7_Force_Motion_Teaching_Pack/Presentation/Class_7_Force_and_Motion_Visual_Presentation.pptx">Download presentation ↓</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="course-card">
+            <div class="card-art art-eight"><span class="class-label">Class 08 · Physics</span><span class="art-title">Electricity &<br>Magnetism</span><span class="art-symbol" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><path d="M36 5 15 35h15l-2 24 21-32H34l2-22Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/><path d="M9 13h8m-4-4v8M48 48h8m-4-4v8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></span></div>
+            <div class="card-body">
+              <div class="pills"><span class="pill live">Interactive prototype</span><span class="pill">Teacher guide</span></div>
+              <h3>Investigate circuits and magnets</h3>
+              <p>Explore an interactive learning adventure for electricity and magnetism concepts.</p>
+              <div class="topics"><span class="topic">Circuits</span><span class="topic">Current</span><span class="topic">Magnetism</span></div>
+              <div class="card-actions">
+                <a class="button button-dark" href="./Class8_Electricity_Magnetism/Interactive_Adventure/Class8_Electricity_Magnetism_Adventure/" target="_blank" rel="noopener">Launch Class 8 demo ↗</a>
+                <a class="button button-light" href="./Class8_Electricity_Magnetism/Class8_Electricity_and_Magnetism.pptx">Download presentation ↓</a>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="assessment">
+          <div class="assessment-copy"><span class="assessment-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M8 4h8a2 2 0 0 1 2 2v14H6V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8"/><path d="M9 4.5V3h6v1.5M9 10h6M9 14h6M9 18h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><div><h3>Science MCQ Assessment Portal</h3><p>A standalone HTML assessment resource for checking understanding after the lesson.</p></div></div>
+          <a class="button button-dark" href="./Science_MCQ_Assessment_Portal.html" target="_blank" rel="noopener">Open assessment portal ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="teaching" id="approach">
+      <div class="container teaching-grid">
+        <div>
+          <div class="kicker">Designed for learning</div>
+          <h2>Let students discover the pattern.</h2>
+          <p class="teaching-lede">The goal isn't to add screens to every lesson. It's to give students a chance to predict, investigate what changes and explain what they observed.</p>
+          <div class="teaching-tip"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3a7 7 0 0 0-4.5 12.4c.9.8 1.5 1.6 1.5 2.6h6c0-1 .6-1.8 1.5-2.6A7 7 0 0 0 12 3Z" stroke="currentColor" stroke-width="1.8"/><path d="M9 21h6m-5.5-3h5M12 0v1M3.5 4.5l1.2 1.2m14.6-1.2-1.2 1.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span><strong>Classroom note:</strong> Start with a physical demonstration when it's safe and practical. Use the simulation to extend observation, not to replace hands-on experience.</span></div>
+        </div>
+        <div class="steps" aria-label="Suggested teaching flow">
+          <div class="step"><span class="step-num">01</span><div><strong>Demonstrate</strong><p>Begin with a real object, event or question students can relate to.</p></div></div>
+          <div class="step"><span class="step-num">02</span><div><strong>Ask for a prediction</strong><p>Invite students to explain what they think will happen before showing the result.</p></div></div>
+          <div class="step"><span class="step-num">03</span><div><strong>Explore and compare</strong><p>Change one variable in the simulation and notice which outcomes change.</p></div></div>
+          <div class="step"><span class="step-num">04</span><div><strong>Explain and assess</strong><p>Let students describe the pattern, then connect it to the formal concept and a short assessment.</p></div></div>
+        </div>
+      </div>
+      <div class="container"><p class="note"><strong>Work in progress:</strong> Some Class 8 instrument visuals are illustrative rather than functional measurement tools, and the geographical-versus-magnetic-pole visualisation needs further refinement. Please verify activities before classroom use. Assessment information containing real student names or scores should never be published here.</p></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div><strong>Interactive Teaching Labs</strong><p>Small experiments. Clearer ideas. Better questions.</p></div>
+      <div class="footer-links"><a href="#demos">Explore demos</a><a href="#approach">Teaching approach</a><a href="https://github.com/neyhal/interactive-teaching-labs" target="_blank" rel="noopener">GitHub repository ↗</a></div>
+    </div>
+  </footer>
+</body>
+</html>
