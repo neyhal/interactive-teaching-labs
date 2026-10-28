@@ -1,0 +1,20 @@
+CLASS 8 ELECTRICITY & MAGNETISM — TEACHER GUIDE
+
+Open index.html in a modern browser. The entire project is offline and uses original SVG illustrations.
+
+Suggested sequence (40–50 minutes):
+1. Circuit mission: predict, open/close the switch, explain the complete path.
+2. Molecular/domain model: compare random and aligned domains.
+3. Magnetic field: reproduce the logic of Oersted's 1820 compass observation.
+4. Electromagnet: change turns and current one at a time.
+5. Motor effect: discuss forces on opposite coil sides and torque.
+6. Generator: move the magnet at different speeds; relate changing magnetic conditions to induced voltage.
+7. History: use Gilbert (c. 1600), Oersted (1820), Sturgeon (1825), Faraday (1831) as milestones.
+
+Scientific caveats:
+- The domain model is a simplified explanation: domains contain many atomic magnetic moments; they are not individual molecules.
+- The field lines are a visual convention, not physical threads.
+- Motor rotation is illustrative; a real DC motor uses a commutator to sustain rotation.
+- Generator signal and electromagnet strength meters are qualitative, not calibrated calculations.
+- Historical dates are milestones; many people contributed to practical motors and generators.
+Safety: use only safe low-voltage classroom equipment. Never connect activities to mains electricity.

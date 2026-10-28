@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Class 7 Force & Motion — Interactive Lab</title>
+<style>
+:root{--navy:#16264a;--blue:#2c69be;--teal:#199a91;--yellow:#fabe3c;--coral:#ef6758;--purple:#845cbe;--bg:#f3f7fc;--ink:#2b3546;--muted:#687587;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink)}
+header{background:linear-gradient(130deg,#16264a,#2c69be);color:white;padding:28px 18px}
+header .wrap,main{max-width:1100px;margin:auto}h1{font-size:clamp(28px,4vw,42px);line-height:1.1;margin:0 0 8px}header p{margin:0;color:#dbe8ff;font-size:17px}
+main{padding:20px 16px 40px}.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+button,.tab{border:0;border-radius:11px;padding:11px 14px;font-weight:750;background:#e4ebf5;color:var(--navy);cursor:pointer}
+button:focus-visible,.tab:focus-visible,input:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+.tab.active,button.primary{background:var(--blue);color:white}
+.panel{display:none}.panel.active{display:block}
+.layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(290px,.9fr);gap:16px}
+.card{background:white;border:1px solid #dce5f0;border-radius:18px;padding:20px;box-shadow:0 7px 24px #19365b0a}
+.card h2,.card h3{margin:0 0 8px;color:var(--navy)}.muted{color:var(--muted)}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+label{display:block;font-size:14px;font-weight:750;color:var(--navy);margin-bottom:6px}
+input[type=range]{width:100%;accent-color:var(--blue)}select{width:100%;padding:10px;border:1px solid #cbd7e5;border-radius:9px;background:white}
+.readout{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+.metric{padding:13px;border-radius:12px;background:#edf4fc}.metric small{display:block;color:var(--muted);font-weight:700}.metric strong{font-size:24px;color:var(--navy)}
+canvas{width:100%;height:auto;display:block;background:#f8fbff;border:1px solid #e1e9f2;border-radius:12px}
+.big{font-size:30px;font-weight:850;color:var(--teal)}.formula{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#f0f4fa;border-radius:8px;padding:9px 12px;display:inline-block}
+.quiz{margin-top:16px;background:#f4f8ff;border-radius:12px;padding:14px}.quiz button{margin:6px 6px 0 0}.feedback{font-weight:750;margin-top:8px;min-height:24px}.good{color:#16804a}.bad{color:#ba4035}
+footer{max-width:1100px;margin:0 auto;padding:0 16px 30px;color:var(--muted);font-size:13px}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.controls{grid-template-columns:1fr}.readout{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>Force & Motion Lab</h1><p>Class 7 Science · Change the values, predict what happens, and explore!</p></div></header>
+<main>
+<div class="tabs" role="tablist" aria-label="Experiments">
+<button class="tab active" data-tab="mass">Mass & Weight</button>
+<button class="tab" data-tab="path">Distance & Displacement</button>
+<button class="tab" data-tab="motion">Speed & Velocity</button>
+<button class="tab" data-tab="accel">Acceleration</button>
+<button class="tab" data-tab="vectors">Scalar & Vector</button>
+</div>
+
+<section class="panel active" id="mass">
+<div class="layout">
+<div class="card"><h2>Same mass, different worlds 🌍🌙🪐</h2><p class="muted">Change the mass and choose a world. The mass stays the same wherever you travel; weight depends on gravity.</p>
+<canvas id="planetCanvas" width="640" height="330" aria-label="Illustration of a person on a planet"></canvas>
+<div class="controls">
+<div><label for="massSlider">Mass: <span id="massVal">60</span> kg</label><input id="massSlider" type="range" min="1" max="150" value="60"></div>
+<div><label for="planet">Choose a world</label><select id="planet"><option value="9.81">Earth — 9.81 N/kg</option><option value="1.62">Moon — 1.62 N/kg</option><option value="24.79">Jupiter — 24.79 N/kg</option></select></div>
+</div>
+<div class="readout"><div class="metric"><small>MASS</small><strong id="massOut">60 kg</strong></div><div class="metric"><small>WEIGHT</small><strong id="weightOut">588.6 N</strong></div></div>
+<p class="formula">Weight = mass × gravitational field strength (W = mg)</p>
+</div>
+<div class="card"><h2>What do you notice?</h2><p id="massExplain">On Earth, a 60 kg mass has a weight of about 589 N.</p><h3>Think about it</h3><p>If you travel to the Moon, which value changes: mass, weight, or both?</p>
+<div class="quiz"><strong>Quick check</strong><p>Which quantity is measured in newtons?</p><button onclick="answer('massQuiz',false)">Mass</button><button onclick="answer('massQuiz',true)">Weight</button><div id="massQuiz" class="feedback"></div></div>
+<p class="muted">Jupiter's gravity is approximate near the cloud tops; it has no solid surface like Earth.</p></div>
+</div>
+</section>
+
+<section class="panel" id="path">
+<div class="layout">
+<div class="card"><h2>Take a route 🧭</h2><p class="muted">Move the endpoint to trace a journey. The red route shows total distance; the blue arrow shows displacement from start to finish.</p>
+<canvas id="pathCanvas" width="640" height="330"></canvas>
+<div class="controls">
+<div><label for="east">Horizontal travel: <span id="eastVal">4</span> m</label><input id="east" type="range" min="-5" max="5" value="4"></div>
+<div><label for="north">Vertical travel: <span id="northVal">3</span> m</label><input id="north" type="range" min="-4" max="4" value="3"></div>
+</div>
+<div class="readout"><div class="metric"><small>DISTANCE (MANHATTAN ROUTE)</small><strong id="distanceOut">7 m</strong></div><div class="metric"><small>DISPLACEMENT MAGNITUDE</small><strong id="dispOut">5 m</strong></div></div>
+<p class="formula">Displacement = straight line from start to finish</p>
+</div>
+<div class="card"><h2>Explain the journey</h2><p id="pathExplain">The traveller goes 4 m east and 3 m north. Distance is 7 m; displacement is 5 m northeast.</p>
+<div class="quiz"><strong>Quick check</strong><p>If you return exactly to your starting point, what is displacement?</p><button onclick="answer('pathQuiz',false)">Equal to total distance</button><button onclick="answer('pathQuiz',true)">Zero</button><div id="pathQuiz" class="feedback"></div></div>
+</div>
+</div>
+</section>
+
+<section class="panel" id="motion">
+<div class="layout">
+<div class="card"><h2>How fast? In which direction?</h2><p class="muted">Set distance and time to calculate average speed. Add a direction to describe average velocity when displacement is known.</p>
+<canvas id="motionCanvas" width="640" height="300"></canvas>
+<div class="controls">
+<div><label for="travel">Distance travelled: <span id="travelVal">100</span> m</label><input id="travel" type="range" min="0" max="500" value="100" step="10"></div>
+<div><label for="time">Time taken: <span id="timeVal">20</span> s</label><input id="time" type="range" min="1" max="100" value="20"></div>
+<div><label for="direction">Direction of displacement</label><select id="direction"><option>East</option><option>North</option><option>West</option><option>South</option><option>Zero displacement</option></select></div>
+</div>
+<div class="readout"><div class="metric"><small>AVERAGE SPEED</small><strong id="speedOut">5 m/s</strong></div><div class="metric"><small>AVERAGE VELOCITY</small><strong id="velocityOut">5 m/s East*</strong></div></div>
+<p class="muted">*Assumes displacement magnitude equals the distance setting, except when zero displacement is selected. In a real journey with turns, use actual displacement for velocity.</p>
+</div>
+<div class="card"><h2>Remember</h2><p><b>Speed</b> tells how much distance is covered per unit time. It is a scalar.</p><p><b>Velocity</b> tells displacement per unit time in a stated direction. It is a vector.</p>
+<div class="quiz"><strong>Quick check</strong><p>Which includes direction?</p><button onclick="answer('motionQuiz',false)">Speed</button><button onclick="answer('motionQuiz',true)">Velocity</button><div id="motionQuiz" class="feedback"></div></div>
+</div>
+</div>
+</section>
+
+<section class="panel" id="accel">
+<div class="layout">
+<div class="card"><h2>Watch velocity change 🚲</h2><p class="muted">Change initial velocity, final velocity and time. The marker moves as the final velocity changes; the calculation updates live.</p>
+<canvas id="accelCanvas" width="640" height="300"></canvas>
+<div class="controls">
+<div><label for="initial">Initial velocity (u): <span id="initialVal">2</span> m/s</label><input id="initial" type="range" min="-10" max="20" value="2"></div>
+<div><label for="final">Final velocity (v): <span id="finalVal">8</span> m/s</label><input id="final" type="range" min="-10" max="20" value="8"></div>
+<div><label for="duration">Time: <span id="durationVal">3</span> s</label><input id="duration" type="range" min="1" max="20" value="3"></div>
+</div>
+<div class="readout"><div class="metric"><small>CHANGE IN VELOCITY</small><strong id="changeOut">6 m/s</strong></div><div class="metric"><small>ACCELERATION</small><strong id="accelOut">2 m/s²</strong></div></div>
+<p class="formula">a = (v − u) ÷ t</p>
+</div>
+<div class="card"><h2>Interpret the result</h2><p id="accelExplain">Velocity increases by 6 m/s in 3 seconds, so acceleration is 2 m/s².</p>
+<div class="quiz"><strong>Quick check</strong><p>Can acceleration be negative?</p><button onclick="answer('accelQuiz',false)">No, never</button><button onclick="answer('accelQuiz',true)">Yes, depending on direction</button><div id="accelQuiz" class="feedback"></div></div>
+</div>
+</div>
+</section>
+
+<section class="panel" id="vectors">
+<div class="layout">
+<div class="card"><h2>Scalar or vector?</h2><p class="muted">Choose a quantity and inspect whether direction is required.</p>
+<div class="controls">
+<div><label for="quantity">Choose a quantity</label><select id="quantity"><option value="speed">Speed</option><option value="velocity">Velocity</option><option value="mass">Mass</option><option value="weight">Weight</option><option value="distance">Distance</option><option value="displacement">Displacement</option><option value="acceleration">Acceleration</option><option value="time">Time</option><option value="force">Force</option></select></div>
+<div><label for="magnitude">Magnitude: <span id="magVal">5</span></label><input id="magnitude" type="range" min="1" max="20" value="5"></div>
+</div>
+<canvas id="vectorCanvas" width="640" height="300"></canvas>
+<div class="metric"><small>CLASSIFICATION</small><strong id="vectorOut">Scalar</strong><p id="vectorExplain">Speed has magnitude only; direction is not needed.</p></div>
+</div>
+<div class="card"><h2>Examples</h2><p><b>Scalars:</b> mass, time, distance, speed, temperature.</p><p><b>Vectors:</b> displacement, velocity, acceleration, force, weight.</p>
+<div class="quiz"><strong>Quick check</strong><p>“12 m/s north” is which type?</p><button onclick="answer('vecQuiz',false)">Scalar</button><button onclick="answer('vecQuiz',true)">Vector</button><div id="vecQuiz" class="feedback"></div></div>
+</div>
+</div>
+</section>
+</main>
+<footer>Class 7 concept lab. Calculations are simplified learning models. For speed and velocity, real average velocity must use displacement divided by time, not total path length.</footer>
+<script>
+const $=id=>document.getElementById(id);
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
+ document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));
+ document.querySelectorAll('.panel').forEach(x=>x.classList.toggle('active',x.id===b.dataset.tab));
+}));
+function answer(id,correct){const el=$(id);el.textContent=correct?'Correct! Nice reasoning.':'Not quite—think about the definition and try again.';el.className='feedback '+(correct?'good':'bad');}
+function setupCanvas(id){const c=$(id),ctx=c.getContext('2d');return {c,ctx};}
+function clear(ctx,c){ctx.clearRect(0,0,c.width,c.height);ctx.fillStyle='#f8fbff';ctx.fillRect(0,0,c.width,c.height);}
+function arrow(ctx,x1,y1,x2,y2,color='#199a91',w=5){ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();let a=Math.atan2(y2-y1,x2-x1),h=14;ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-h*Math.cos(a-.5),y2-h*Math.sin(a-.5));ctx.lineTo(x2-h*Math.cos(a+.5),y2-h*Math.sin(a+.5));ctx.closePath();ctx.fill();}
+function drawPlanet(){
+ const {c,ctx}=setupCanvas('planetCanvas');clear(ctx,c);
+ const g=+$('planet').value,m=+$('massSlider').value,w=m*g;
+ const name=$('planet').selectedOptions[0].text.split(' — ')[0];
+ const color=name==='Earth'?'#2c69be':name==='Moon'?'#a7adb8':'#c98f62';
+ ctx.fillStyle=color;ctx.beginPath();ctx.arc(320,145,83,0,Math.PI*2);ctx.fill();
+ if(name==='Earth'){ctx.fillStyle='#49a96c';ctx.beginPath();ctx.ellipse(295,132,28,17,-.5,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(345,167,22,14,.4,0,Math.PI*2);ctx.fill();}
+ if(name==='Moon'){ctx.strokeStyle='#777f8e';ctx.lineWidth=4;[[295,130,12],[340,165,17],[345,112,8]].forEach(([x,y,r])=>{ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.stroke();});}
+ if(name==='Jupiter'){ctx.strokeStyle='#a66f4d';ctx.lineWidth=7;[110,135,165,190].forEach(y=>{ctx.beginPath();ctx.ellipse(320,y,70,8,0,0,Math.PI*2);ctx.stroke();});}
+ ctx.fillStyle='#16264a';ctx.font='bold 21px system-ui';ctx.textAlign='center';ctx.fillText(name.toUpperCase(),320,255);
+ ctx.font='18px system-ui';ctx.fillText(`Mass: ${m} kg`,160,290);ctx.fillText(`Weight: ${w.toFixed(1)} N`,480,290);
+ $('massVal').textContent=m;$('massOut').textContent=m+' kg';$('weightOut').textContent=w.toFixed(1)+' N';
+ $('massExplain').textContent=`On ${name}, W = m × g = ${m} kg × ${g.toFixed(2)} N/kg = ${w.toFixed(1)} N. Mass remains ${m} kg; weight changes because gravity changes.`;
+}
+function drawPath(){
+ const {c,ctx}=setupCanvas('pathCanvas');clear(ctx,c);
+ const e=+$('east').value,n=+$('north').value;
+ const sx=105,sy=235,scale=45,ex=sx+e*scale,ey=sy-n*scale;
+ ctx.strokeStyle='#d9e3ef';ctx.lineWidth=1;
+ for(let x=70;x<590;x+=45){ctx.beginPath();ctx.moveTo(x,55);ctx.lineTo(x,275);ctx.stroke();}
+ for(let y=55;y<280;y+=45){ctx.beginPath();ctx.moveTo(60,y);ctx.lineTo(590,y);ctx.stroke();}
+ ctx.strokeStyle='#ef6758';ctx.lineWidth=7;ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(ex,sy);ctx.lineTo(ex,ey);ctx.stroke();
+ arrow(ctx,sx,sy,ex,ey,'#2c69be',5);
+ ctx.fillStyle='#199a91';ctx.beginPath();ctx.arc(sx,sy,8,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#16264a';ctx.beginPath();ctx.arc(ex,ey,8,0,Math.PI*2);ctx.fill();
+ ctx.font='bold 15px system-ui';ctx.fillText('START',sx-25,sy+27);ctx.fillText('FINISH',ex+9,ey-10);
+ const dist=Math.abs(e)+Math.abs(n),disp=Math.hypot(e,n);
+ $('eastVal').textContent=e;$('northVal').textContent=n;$('distanceOut').textContent=dist+' m';$('dispOut').textContent=disp.toFixed(2)+' m';
+ const dir=e===0&&n===0?'no direction':Math.abs(e)>=Math.abs(n)?(e>=0?'east':'west'):(n>=0?'north':'south');
+ $('pathExplain').textContent=`The route distance is ${dist} m. Straight-line displacement is ${disp.toFixed(2)} m${disp===0?'':', generally toward '+(e>=0&&n>=0?'the northeast quadrant':e<0&&n>=0?'the northwest quadrant':e>=0&&n<0?'the southeast quadrant':'the southwest quadrant')}.`;
+}
+function drawMotion(){
+ const {c,ctx}=setupCanvas('motionCanvas');clear(ctx,c);
+ const d=+$('travel').value,t=+$('time').value,dir=$('direction').value;
+ ctx.fillStyle='#16264a';ctx.font='bold 19px system-ui';ctx.fillText('Distance travelled',25,35);
+ ctx.strokeStyle='#dce5f0';ctx.lineWidth=12;ctx.beginPath();ctx.moveTo(55,130);ctx.lineTo(585,130);ctx.stroke();
+ let x=55+(d/500)*530;ctx.fillStyle='#2c69be';ctx.beginPath();ctx.arc(x,130,18,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#687587';ctx.font='15px system-ui';ctx.fillText('0 m',45,170);ctx.fillText('500 m',545,170);
+ ctx.fillStyle='#199a91';ctx.font='bold 22px system-ui';ctx.fillText(`${d} m in ${t} s`,210,220);
+ const speed=d/t,vel=dir==='Zero displacement'?0:speed;
+ $('travelVal').textContent=d;$('timeVal').textContent=t;$('speedOut').textContent=speed.toFixed(2)+' m/s';$('velocityOut').textContent=vel.toFixed(2)+' m/s'+(vel===0?'':' '+dir);
+}
+function drawAccel(){
+ const {c,ctx}=setupCanvas('accelCanvas');clear(ctx,c);
+ const u=+$('initial').value,v=+$('final').value,t=+$('duration').value,change=v-u,a=change/t;
+ ctx.strokeStyle='#dce5f0';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(45,230);ctx.lineTo(595,230);ctx.stroke();
+ // marker position tied to final velocity, clipped to track
+ const x=65+((v+10)/30)*500;
+ ctx.fillStyle='#2c69be';ctx.beginPath();ctx.arc(x,190,22,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#16264a';ctx.font='bold 17px system-ui';ctx.fillText(`u = ${u} m/s`,55,70);ctx.fillText(`v = ${v} m/s`,240,70);ctx.fillText(`t = ${t} s`,435,70);
+ if(v>=0)arrow(ctx,x,145,Math.min(590,x+Math.max(15,v*5)),145,'#199a91',5);else arrow(ctx,x,145,Math.max(50,x+Math.min(-15,v*5)),145,'#ef6758',5);
+ $('initialVal').textContent=u;$('finalVal').textContent=v;$('durationVal').textContent=t;$('changeOut').textContent=change.toFixed(1)+' m/s';$('accelOut').textContent=a.toFixed(2)+' m/s²';
+ $('accelExplain').textContent=`Velocity changes by ${change.toFixed(1)} m/s over ${t} s. Average acceleration is ${a.toFixed(2)} m/s². A negative value means acceleration points in the negative direction chosen.`;
+}
+function drawVector(){
+ const {c,ctx}=setupCanvas('vectorCanvas');clear(ctx,c);
+ const q=$('quantity').value,m=+$('magnitude').value;
+ const vectors=['velocity','weight','displacement','acceleration','force'];
+ const vector=vectors.includes(q),names={speed:'Speed',velocity:'Velocity',mass:'Mass',weight:'Weight',distance:'Distance',displacement:'Displacement',acceleration:'Acceleration',time:'Time',force:'Force'};
+ ctx.fillStyle='#16264a';ctx.font='bold 19px system-ui';ctx.fillText(names[q],25,35);
+ if(vector){arrow(ctx,320,175,320+Math.min(230,m*10),175,'#199a91',7);ctx.fillStyle='#199a91';ctx.font='bold 18px system-ui';ctx.fillText('direction shown by arrow',210,225);}
+ else {ctx.fillStyle='#2c69be';ctx.beginPath();ctx.arc(320,175,Math.min(85,m*4),0,Math.PI*2);ctx.fill();ctx.fillStyle='white';ctx.font='bold 18px system-ui';ctx.textAlign='center';ctx.fillText('SIZE',320,182);ctx.textAlign='left';}
+ $('magVal').textContent=m;$('vectorOut').textContent=vector?'VECTOR':'SCALAR';
+ $('vectorExplain').textContent=vector?`${names[q]} is a vector: it has magnitude and direction.`:`${names[q]} is a scalar: it has magnitude only, with no direction needed.`;
+}
+['massSlider','planet'].forEach(id=>$(id).addEventListener('input',drawPlanet));
+['east','north'].forEach(id=>$(id).addEventListener('input',drawPath));
+['travel','time','direction'].forEach(id=>$(id).addEventListener('input',drawMotion));
+['initial','final','duration'].forEach(id=>$(id).addEventListener('input',drawAccel));
+['quantity','magnitude'].forEach(id=>$(id).addEventListener('input',drawVector));
+drawPlanet();drawPath();drawMotion();drawAccel();drawVector();
+</script>
+</body></html>
